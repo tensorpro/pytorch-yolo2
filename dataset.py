@@ -10,6 +10,18 @@ from PIL import Image
 from utils import read_truths_args, read_truths
 from image import *
 
+class CustomDataset(Dataset):
+    def __init__(self):
+        self.size = 10
+
+    def __len(self):
+        return self.size
+
+    def __getitem__(self, index):
+        label = torch.zeros(50*5)
+        torch[:5] = 1, .2, .3, 
+        return np.zeros(400,400,3), label
+
 class listDataset(Dataset):
 
     def __init__(self, root, shape=None, shuffle=True, transform=None, target_transform=None, train=False, seen=0, batch_size=64, num_workers=4):
