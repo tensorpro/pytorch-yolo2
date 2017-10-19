@@ -9,7 +9,58 @@ from torch.utils.data import Dataset
 from PIL import Image
 from utils import read_truths_args, read_truths
 from image import *
+import cv2
+from doom_dataset import DetectData, show_bbs
+import matplotlib.pyplot as plt
+import sys
 
+class Overfit(Dataset):
+
+    def __init__(self, baseset=DetectData(),
+                 transform=None, target_transform=None, shape=None, length=1):
+        self.baseset = baseset
+        self.shape = shape
+        self.transform = transform
+        self.target_transform = target_transform
+        self.x = cv2.imread('test.png')
+        self.y = np.load('testlab.npy')
+        self.length = length
+    def __len__(self):
+        return self.length
+
+    def __getitem__(self, i):
+        x, y = self.x, self.y
+        if self.shape is not None:
+            x = cv2.resize(x,self.shape[::-1])
+        if self.transform is not None:
+            x = self.transform(x)
+        if self.target_transform is not None:
+            y = self.target_transform(y)
+        return x, y
+
+    
+class Custom(Dataset):
+    
+    def __init__(self, baseset=DetectData(),
+                 transform=None, target_transform=None, shape=None):
+        self.baseset = baseset
+        self.shape = shape
+        self.transform = transform
+        self.target_transform = target_transform
+
+    def __len__(self):
+        return len(self.baseset)
+
+    def __getitem__(self, i):
+        x, y = self.baseset[i]
+        if self.shape is not None:
+            x = cv2.resize(x,self.shape[::-1])
+        if self.transform is not None:
+            x = self.transform(x)
+        if self.target_transform is not None:
+            y = self.target_transform(y)
+        return x, y
+            
 class listDataset(Dataset):
 
     def __init__(self, root, shape=None, shuffle=True, transform=None, target_transform=None, train=False, seen=0, batch_size=64, num_workers=4):
@@ -59,6 +110,7 @@ class listDataset(Dataset):
             exposure = 1.5
 
             img, label = load_data_detection(imgpath, self.shape, jitter, hue, saturation, exposure)
+            img = np.random.randint(0,200,(416,416,3))
             label = torch.from_numpy(label)
         else:
             img = Image.open(imgpath).convert('RGB')
@@ -81,7 +133,6 @@ class listDataset(Dataset):
                 label = tmp[0:50*5]
             elif tsz > 0:
                 label[0:tsz] = tmp
-
         if self.transform is not None:
             img = self.transform(img)
 
