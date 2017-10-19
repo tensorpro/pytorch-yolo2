@@ -87,7 +87,7 @@ data= dataset.Custom(shape=(init_width, init_height),
                        transforms.ToTensor(),
                    ]))
 
-trdata  = dataset.Overfit(length=8)
+# trdata  = dataset.Overfit(length=8)
 test_loader = torch.utils.data.DataLoader(
     data,
     batch_size=1, shuffle=False, **kwargs)
