@@ -192,7 +192,7 @@ class Overlayer:
 class DetectData(Dataset):
 
     def __init__(self, rgb=None, datapath=path.expanduser('~/data/backgrounds.npy'),
-                 max_sprites=10, overlayer=Overlayer(), subsize=32):
+                 max_sprites=10, overlayer=Overlayer(), subsize=None):
         if rgb is not None:
             self.rgb = rgb
         else:
