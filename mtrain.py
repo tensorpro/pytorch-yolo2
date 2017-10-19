@@ -125,8 +125,8 @@ def adjust_learning_rate(optimizer, batch):
 def train(epoch):
     global processed_batches
     # global data
-    data= dataset.Overfit(
-        length=32,
+    data= dataset.Custom(
+        # length=32,
                           shape=(init_width, init_height),
                    transform=transforms.Compose([
                        transforms.ToTensor(),
