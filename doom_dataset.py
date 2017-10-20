@@ -34,7 +34,7 @@ def overlay_label(img, sprite, top_left, sprite_label):
 
 def rescale(sprite, scale):
     h,w = sprite.shape[:2]
-    return cv2.resize(sprite, max((int(scale*w),4), max(int(scale*h), 4)))
+    return cv2.resize(sprite, max((int(scale*w),4)), max(int(scale*h), 4))
 
 def load_sprites(dir_path):
     sprites = []
@@ -161,7 +161,7 @@ def normal(center=0, mul=1, minval=0, maxval=np.inf, shape=None):
 class Overlayer:
 
     def __init__(self, sprite_path=path.expanduser('~/data/sprites'),
-                 scale_fn=lambda:normal(1,.4, minval=.1),
+                 scale_fn=lambda:normal(1,.3, minval=.3),
                  sprite_count_fn=lambda:normal(3, .3, minval=1, maxval=49)):
         self.sdb = sprite_db(sprite_path)
         self.sprites = sprite_stream(self.sdb)
