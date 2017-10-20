@@ -34,7 +34,7 @@ def overlay_label(img, sprite, top_left, sprite_label):
 
 def rescale(sprite, scale):
     h,w = sprite.shape[:2]
-    return cv2.resize(sprite, max((int(scale*w),4)), max(int(scale*h), 4))
+    return cv2.resize(sprite, (max(int(scale*w),4), max(int(scale*h), 4)))
 
 def load_sprites(dir_path):
     sprites = []
