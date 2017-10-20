@@ -90,7 +90,7 @@ data= dataset.Custom(shape=(init_width, init_height),
 # trdata  = dataset.Overfit(length=8)
 test_loader = torch.utils.data.DataLoader(
     data,
-    batch_size=1, shuffle=False, **kwargs)
+    batch_size=batch_size, shuffle=False, **kwargs)
 
 if use_cuda:
     if ngpus > 1:
@@ -199,7 +199,7 @@ def train(epoch):
         cur_model.seen = (epoch + 1) * len(train_loader.dataset)
         cur_model.save_weights('%s/%06d.weights' % (backupdir, epoch+1))
 
-def test(epoch):
+def test(epoch, max_batches=20):
     print("TEST")
     def truths_length(truths):
         for i in range(50):
@@ -218,9 +218,13 @@ def test(epoch):
     proposals   = 0.0
     correct     = 0.0
 
+    
     for batch_idx, (data, target) in enumerate(test_loader):
+        if batch_idx > max_batches:
+            break
         if use_cuda:
             data = data.cuda()
+
         data = Variable(data, volatile=True)
         output = model(data).data
         all_boxes = get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors)
